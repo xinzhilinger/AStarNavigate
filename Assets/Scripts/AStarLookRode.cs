@@ -39,12 +39,12 @@ public class AStarLookRode
         {
             if (rodes.Peek().posX == endGrid.posX && rodes.Peek().posY == endGrid.posY)
             {
-                ChangeRodeColor();
+                GetRode();
                 break;
             }
 
             TraverseItem(rodes.Peek().posX, rodes.Peek().posY);
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.2f);
             Traverse();
 
         }
@@ -64,18 +64,25 @@ public class AStarLookRode
         int xMax = Mathf.Min(i + 1, meshMap.meshRange.horizontal - 1);
         int yMin = Mathf.Max(j - 1, 0);
         int yMax = Mathf.Min(j + 1, meshMap.meshRange.vertical - 1);
+
+        Grid item = meshMap.grids[i, j].GetComponent<Grid>();
         for (int x = xMin; x <= xMax; x++)
         {
             for (int y = yMin; y <= yMax; y++)
             {
                 Grid grid = meshMap.grids[x, y].GetComponent<Grid>();
-                if ((y == j && i == x) || closeGrids.Contains(grid)|| openGrids.Contains(grid))
+                if ((y == j && i == x) || closeGrids.Contains(grid))
                 {
                     continue;
                 }
+
                 if (openGrids.Contains(grid))
                 {
-                    grid.parentGrid = meshMap.grids[i, j].GetComponent<Grid>();
+                    if (item.All > GetLength(grid, item))
+                    {
+                        item.parentGrid = grid;
+                        SetNoteData(item);
+                    }                    
                     continue;
                 }
                     
@@ -83,7 +90,7 @@ public class AStarLookRode
                 {
                     openGrids.Add(grid);
                     grid.ChangeColor(Color.blue);
-                    grid.parentGrid= meshMap.grids[i, j].GetComponent<Grid>();
+                    grid.parentGrid= item;
                 }
                
             }
@@ -112,38 +119,34 @@ public class AStarLookRode
                 minLength = SetNoteData(openGrids[i]);
             }
         }
-        minLenthGrid.gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+        minLenthGrid.ChangeColor(Color.green);
         Debug.Log("我在寻找人生的方向" + minLenthGrid.posX + "::::" + minLenthGrid.posY);
 
         closeGrids.Add(minLenthGrid);
-        openGrids.Remove(minLenthGrid);
-        while (rodes.Count != 0)
-        {
-            if (minLenthGrid.parentGrid == rodes.Peek())
-            {
-                break;
-            }
-            rodes.Pop();
-        }
-        
+        openGrids.Remove(minLenthGrid);               
         rodes.Push(minLenthGrid);
     }
 
 
-    void ChangeRodeColor()
+    void GetRode()
     {
         List<Grid> grids = new List<Grid>();
-        
-        
+        rodes.Peek().ChangeColor(Color.black);
+        grids.Insert(0, rodes.Pop());
         while (rodes.Count != 0)
         {
-            rodes.Pop().ChangeColor(Color.black);
-            grids.Insert(0, rodes.Pop());
+            if (grids[0].parentGrid != rodes.Peek())
+            {
+                rodes.Pop();
 
-        }
+            }
+            else
+            {
+                rodes.Peek().ChangeColor(Color.black);
+                grids.Insert(0, rodes.Pop());               
+            }
 
-        
-        
+        }      
     }
     public void AddGridToRode(Grid grid)
     {
@@ -159,11 +162,11 @@ public class AStarLookRode
     }
 
 
-     /// <summary>
-     /// 用来计算某一点位的预估路径总长度
-     /// </summary>
-     /// <param name="grid"></param>
-     /// <returns></returns>
+    /// <summary>
+    /// 用来计算某一点位的预估路径总长度
+    /// </summary>
+    /// <param name="grid"></param>
+    /// <returns></returns>
     public int SetNoteData(Grid grid)
     {
 
@@ -176,6 +179,20 @@ public class AStarLookRode
         grid.H = numH * 10;
         grid.All = grid.H + grid.G;
         return grid.All;
+    }
+
+
+    public int GetLength(Grid bejinGrid,Grid grid)
+    {
+
+        int numG = Mathf.Abs(bejinGrid.posX - grid.posX) + Mathf.Abs(bejinGrid.posY - grid.posY);
+        int n = numG == 1 ? 10 : 14;
+        int G = bejinGrid.G + n;
+
+        int numH = Mathf.Abs(endGrid.posX - grid.posX) + Mathf.Abs(endGrid.posY - grid.posY);
+        int H = numH * 10;
+        int All = grid.H + grid.G;
+        return All;
     }
 
 
