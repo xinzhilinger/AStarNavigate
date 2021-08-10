@@ -34,7 +34,7 @@ public class AStarLookRode
         yield return new WaitForSeconds(1);
         Traverse();
 
-        //ÎªÁË±ÜÃâÎŞ·¨Íê³ÉÑ°Â·¶øÌø²»³öÑ­»·µÄÇé¿ö£¬Ê¹ÓÃForÀ´¹æ¶¨Ñ°Â·µÄ×î´ó²½Êı
+        //ä¸ºäº†é¿å…æ— æ³•å®Œæˆå¯»è·¯è€Œè·³ä¸å‡ºå¾ªç¯çš„æƒ…å†µï¼Œä½¿ç”¨Foræ¥è§„å®šå¯»è·¯çš„æœ€å¤§æ­¥æ•°
         for (int i = 0; i < 6000; i++)
         {
             if (rodes.Peek().posX == endGrid.posX && rodes.Peek().posY == endGrid.posY)
@@ -54,7 +54,7 @@ public class AStarLookRode
 
 
     /// <summary>
-    /// Ñ°ÕÒ×ßµ½µ±Ç°µãÎ»Ê±£¬ÏÂÒ»²½ËùÓĞ¿ÉÒÔ×ßµÄÏàÁÚÎ»ÖÃ²¢¼ÓÈëµ½¿ª·ÅÁĞ±í
+    /// å¯»æ‰¾èµ°åˆ°å½“å‰ç‚¹ä½æ—¶ï¼Œä¸‹ä¸€æ­¥æ‰€æœ‰å¯ä»¥èµ°çš„ç›¸é‚»ä½ç½®å¹¶åŠ å…¥åˆ°å¼€æ”¾åˆ—è¡¨
     /// </summary>
     /// <param name="i"></param>
     /// <param name="j"></param>
@@ -94,7 +94,7 @@ public class AStarLookRode
     }
 
     /// <summary>
-    /// ÔÚ¿ª·ÅÁĞ±íÑ¡ÖĞÂ·¾¶×î¶ÌµÄµã¼ÓÈëµÄÂ·¾¶Õ»£¬Í¬Ê±½«Â·¾¶µã¼ÓÈëµ½±ÕºÏÁĞ±íÖĞ
+    /// åœ¨å¼€æ”¾åˆ—è¡¨é€‰ä¸­è·¯å¾„æœ€çŸ­çš„ç‚¹åŠ å…¥çš„è·¯å¾„æ ˆï¼ŒåŒæ—¶å°†è·¯å¾„ç‚¹åŠ å…¥åˆ°é—­åˆåˆ—è¡¨ä¸­
     /// </summary>
     public void Traverse()
     {
@@ -113,7 +113,7 @@ public class AStarLookRode
             }
         }
         minLenthGrid.gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
-        Debug.Log("ÎÒÔÚÑ°ÕÒÈËÉúµÄ·½Ïò" + minLenthGrid.posX + "::::" + minLenthGrid.posY);
+        Debug.Log("æˆ‘åœ¨å¯»æ‰¾äººç”Ÿçš„æ–¹å‘" + minLenthGrid.posX + "::::" + minLenthGrid.posY);
 
         closeGrids.Add(minLenthGrid);
         openGrids.Remove(minLenthGrid);
@@ -160,7 +160,7 @@ public class AStarLookRode
 
 
      /// <summary>
-     /// ÓÃÀ´¼ÆËãÄ³Ò»µãÎ»µÄÔ¤¹ÀÂ·¾¶×Ü³¤¶È
+     /// ç”¨æ¥è®¡ç®—æŸä¸€ç‚¹ä½çš„é¢„ä¼°è·¯å¾„æ€»é•¿åº¦
      /// </summary>
      /// <param name="grid"></param>
      /// <returns></returns>
@@ -177,15 +177,6 @@ public class AStarLookRode
         grid.All = grid.H + grid.G;
         return grid.All;
     }
-
-
-
-
-
-
-
-
-
 
 
 }
